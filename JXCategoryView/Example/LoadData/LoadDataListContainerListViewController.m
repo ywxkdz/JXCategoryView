@@ -27,6 +27,12 @@
     return self.view;
 }
 
+
+-(BOOL)showInAllScreen{
+    return YES;
+}
+
+
 - (void)listDidAppear {
     NSLog(@"%@", NSStringFromSelector(_cmd));
 }

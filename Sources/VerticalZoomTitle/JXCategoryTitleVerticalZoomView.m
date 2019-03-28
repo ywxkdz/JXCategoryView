@@ -34,6 +34,8 @@
     self.selectedAnimationEnabled = YES;
     _maxVerticalCellSpacing = 30;
     _minVerticalCellSpacing = 20;
+    self.backgroundColor = [UIColor clearColor];
+    
 }
 
 - (void)listDidScrollWithVerticalHeightPercent:(CGFloat)percent {

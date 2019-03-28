@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor greenColor];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 
     CGFloat topStatusBarHeight = 20;
@@ -36,7 +36,7 @@
     self.categoryView = [[JXCategoryTitleVerticalZoomView alloc] init];
     self.categoryView.frame = CGRectMake(0, topStatusBarHeight, self.view.bounds.size.width, self.maxCategoryViewHeight);
     self.categoryView.averageCellSpacingEnabled = NO;
-    self.categoryView.titles = @[@"推荐", @"关注"];
+    self.categoryView.titles = @[@"推荐", @"关注",@"热点"];
     self.categoryView.delegate = self;
     self.categoryView.titleLabelAnchorPointStyle = JXCategoryTitleLabelAnchorPointStyleBottom;
     self.categoryView.titleLabelVerticalOffset = -5;
@@ -49,7 +49,12 @@
     self.categoryView.minVerticalFontScale = 1.3;
     self.categoryView.maxVerticalContentEdgeInsetLeft = 30;
     self.categoryView.minVerticalContentEdgeInsetLeft = 15;
+    
+    self.categoryView.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.4];
+    
+    
     [self.view addSubview:self.categoryView];
+    
 
     UIView *separatorLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.categoryView.bounds.size.height - 1, self.categoryView.bounds.size.width, 1)];
     separatorLine.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -57,12 +62,16 @@
     [self.categoryView addSubview:separatorLine];
 
     self.listContainerView = [[JXCategoryListContainerView alloc] initWithDelegate:self];
-    self.listContainerView.frame = CGRectMake(0, topStatusBarHeight + self.maxCategoryViewHeight, self.view.bounds.size.width, self.view.bounds.size.height - topStatusBarHeight - self.maxCategoryViewHeight);
+    self.listContainerView.backgroundColor = [UIColor redColor];
+    self.listContainerView.frame = self.view.bounds; // CGRectMake(0, 0 , self.view.bounds.size.width, self.view.bounds.size.height - topStatusBarHeight - self.maxCategoryViewHeight);
     self.listContainerView.didAppearPercent = 0.01; //滚动一点就触发加载
     self.listContainerView.defaultSelectedIndex = 0;
     [self.view addSubview:self.listContainerView];
 
     self.categoryView.contentScrollView = self.listContainerView.scrollView;
+    
+    [self.view bringSubviewToFront:self.categoryView];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,6 +87,9 @@
 }
 
 - (void)listScrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    return;
+    
     if (!(scrollView.isTracking || scrollView.isDecelerating)) {
         //用户交互引起的滚动才处理
         return;

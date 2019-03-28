@@ -78,6 +78,7 @@ struct DelegateFlags {
     [self refreshDataSource];
     [self refreshState];
     [self.collectionView.collectionViewLayout invalidateLayout];
+    self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView reloadData];
 }
 
@@ -292,6 +293,7 @@ struct DelegateFlags {
     self.collectionView.scrollsToTop = NO;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
+    self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView registerClass:[self preferredCellClass] forCellWithReuseIdentifier:NSStringFromClass([self preferredCellClass])];
     if (@available(iOS 10.0, *)) {
         self.collectionView.prefetchingEnabled = NO;

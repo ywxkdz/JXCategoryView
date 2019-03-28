@@ -44,6 +44,7 @@
     }else {
         _scrollView = [[UIScrollView alloc] init];
     }
+    self.scrollView.backgroundColor = [UIColor yellowColor];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -91,10 +92,21 @@
     [super layoutSubviews];
 
     self.scrollView.frame = self.bounds;
+    
     self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width*[self.delegate numberOfListsInlistContainerView:self], self.scrollView.bounds.size.height);
     [_lock lock];
+    
     [_validListDict enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull index, id<JXCategoryListContentViewDelegate>  _Nonnull list, BOOL * _Nonnull stop) {
-        [list listView].frame = CGRectMake(index.intValue*self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+        
+        BOOL showInAllScreen = NO;
+        if ([list respondsToSelector:@selector(showInAllScreen)]) {
+            showInAllScreen = [list showInAllScreen];
+        }
+        
+        CGFloat y = showInAllScreen? self.scrollView.bounds.size.height - [UIScreen mainScreen].bounds.size.height : 0;
+        CGFloat h = !showInAllScreen? self.scrollView.bounds.size.height :[UIScreen mainScreen].bounds.size.height ;
+
+        [list listView].frame = CGRectMake(index.intValue*self.scrollView.bounds.size.width,y, self.scrollView.bounds.size.width,h);
     }];
     [_lock unlock];
 }
@@ -188,7 +200,16 @@
         list = [self.delegate listContainerView:self initListForIndex:index];
     }
     if ([list listView].superview == nil) {
-        [list listView].frame = CGRectMake(index*self.scrollView.bounds.size.width, 0, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height);
+        
+        BOOL showInAllScreen = NO;
+        if ([list respondsToSelector:@selector(showInAllScreen)]) {
+            showInAllScreen = [list showInAllScreen];
+        }
+        CGFloat y = showInAllScreen? self.scrollView.bounds.size.height - [UIScreen mainScreen].bounds.size.height : 0;
+        CGFloat h = !showInAllScreen? self.scrollView.bounds.size.height :[UIScreen mainScreen].bounds.size.height ;
+        
+        [list listView].frame = CGRectMake(index*self.scrollView.bounds.size.width, y, self.scrollView.bounds.size.width,h);
+        
         [self.scrollView addSubview:[list listView]];
         [_lock lock];
         _validListDict[@(index)] = list;

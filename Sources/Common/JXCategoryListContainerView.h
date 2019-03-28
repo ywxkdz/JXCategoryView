@@ -23,6 +23,14 @@
 @optional
 
 /**
+ 可选实现，全屏悬浮展示
+ 
+ */
+
+-(BOOL) showInAllScreen;
+
+
+/**
  可选实现，列表显示的时候调用
  */
 - (void)listDidAppear;
